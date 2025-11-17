@@ -2,46 +2,42 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Cadastro de Usuário</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edu.App Orçamentos</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, button { margin: 5px 0; padding: 8px; width: 200px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .tabelaPrecos { display: none; margin-top: 20px; }
+  </style>
 </head>
 <body>
-  <h1>Criar Conta</h1>
+  <h1>Cadastro de Usuário</h1>
   <input id="nome" placeholder="Nome" /><br />
   <input id="email" placeholder="Email" /><br />
   <input id="senha" type="password" placeholder="Senha" /><br />
   <button id="cadastrar">Cadastrar</button>
 
+  <section class="tabelaPrecos">
+    <h2>Tabela de Preços</h2>
+    <table>
+      <thead>
+        <tr><th>Serviço</th><th>Valor por M2</th></tr>
+      </thead>
+      <tbody id="tabela-body">
+        <tr><td>Alvenaria Dobrada</td><td id="alvenaria_dobrada">0.00</td></tr>
+        <tr><td>Alvenaria Singela</td><td id="alvenaria_singela">0.00</td></tr>
+        <tr><td>Sapatas</td><td id="sapatas">0.00</td></tr>
+        <tr><td>Pilares</td><td id="pilares">0.00</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-  <script>
-  const firebaseConfig = {  apiKey: "AIzaSyCXkOedIsoQAsdxxqM8F3P1YhqtMpaVCyU",
-  authDomain: "site-orcamento-d9d86.firebaseapp.com",
-  databaseURL: "https://site-orcamento-d9d86-default-rtdb.firebaseio.com",
-  projectId: "site-orcamento-d9d86",
-  storageBucket: "site-orcamento-d9d86.firebasestorage.app",
-  messagingSenderId: "74130841186",
-  appId: "1:74130841186:web:c052eb21a05bd35712bb3b"
- };
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  // Exemplo de cadastro
-  function cadastrar() {
-    const nome = document.getElementById("nome").value;
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
-
-    db.collection("usuarios").doc(email).set({
-      nome,
-      email,
-      senha,
-      alvenaria_dobrada: 0.0
-    }).then(() => alert("Usuário cadastrado!"))
-      .catch(e => alert("Erro: " + e.message));
-  }
-
-  document.getElementById("cadastrar").onclick = cadastrar;
-</script> 
-
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
