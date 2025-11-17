@@ -2,42 +2,129 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Edu.App Orçamentos</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, button { margin: 5px 0; padding: 8px; width: 200px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input { margin: 5px 0; padding: 5px; }
+    button { margin: 10px 0; padding: 5px 10px; cursor: pointer; }
+    table { width: 80%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #000; padding: 8px; text-align: left; }
     th { background-color: #f2f2f2; }
-    .tabelaPrecos { display: none; margin-top: 20px; }
+    #tabelaPrecos { display: none; }
+    .editable { cursor: pointer; color: blue; }
   </style>
 </head>
 <body>
-  <h1>Cadastro de Usuário</h1>
-  <input id="nome" placeholder="Nome" /><br />
-  <input id="email" placeholder="Email" /><br />
-  <input id="senha" type="password" placeholder="Senha" /><br />
+
+<h1>Cadastro de Usuário</h1>
+<div id="cadastro">
+  <input id="nome" placeholder="Nome" /><br/>
+  <input id="email" placeholder="Email" /><br/>
+  <input id="senha" type="password" placeholder="Senha" /><br/>
   <button id="cadastrar">Cadastrar</button>
+</div>
 
-  <section class="tabelaPrecos">
-    <h2>Tabela de Preços</h2>
-    <table>
-      <thead>
-        <tr><th>Serviço</th><th>Valor por M2</th></tr>
-      </thead>
-      <tbody id="tabela-body">
-        <tr><td>Alvenaria Dobrada</td><td id="alvenaria_dobrada">0.00</td></tr>
-        <tr><td>Alvenaria Singela</td><td id="alvenaria_singela">0.00</td></tr>
-        <tr><td>Sapatas</td><td id="sapatas">0.00</td></tr>
-        <tr><td>Pilares</td><td id="pilares">0.00</td></tr>
-      </tbody>
-    </table>
-  </section>
+<div id="tabelaPrecos">
+  <h2>Tabela de Preços</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Serviço</th>
+        <th>Valor por M² (R$)</th>
+      </tr>
+    </thead>
+    <tbody id="servicosBody">
+      <tr><td>Alvenaria Dobrada</td><td class="editable" data-field="alvenaria_dobrada">0.00</td></tr>
+      <tr><td>Alvenaria Singela</td><td class="editable" data-field="alvenaria_singela">0.00</td></tr>
+      <tr><td>Sapatas</td><td class="editable" data-field="sapatas">0.00</td></tr>
+      <tr><td>Pilares</td><td class="editable" data-field="pilares">0.00</td></tr>
+      <tr><td>Cintas</td><td class="editable" data-field="cintas">0.00</td></tr>
+      <tr><td>Lage</td><td class="editable" data-field="lage">0.00</td></tr>
+      <tr><td>Contra Piso</td><td class="editable" data-field="contrapiso">0.00</td></tr>
+      <tr><td>Piso</td><td class="editable" data-field="piso">0.00</td></tr>
+      <tr><td>Chapisco</td><td class="editable" data-field="chapisco">0.00</td></tr>
+      <tr><td>Emboço</td><td class="editable" data-field="emboco">0.00</td></tr>
+      <tr><td>Cerâmica Piso</td><td class="editable" data-field="ceramica_piso">0.00</td></tr>
+      <tr><td>Cerâmica Parede</td><td class="editable" data-field="ceramica_parede">0.00</td></tr>
+      <tr><td>Porcelanato Piso</td><td class="editable" data-field="porcelanato_piso">0.00</td></tr>
+      <tr><td>Porcelanato Parede</td><td class="editable" data-field="porcelanato_parede">0.00</td></tr>
+    </tbody>
+  </table>
+</div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-  <script src="script.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script>
+  // Configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXkOedIsoQAsdxxqM8F3P1YhqtMpaVCyU",
+    authDomain: "site-orcamento-d9d86.firebaseapp.com",
+    projectId: "site-orcamento-d9d86",
+    storageBucket: "site-orcamento-d9d86.appspot.com",
+    messagingSenderId: "74130841186",
+    appId: "1:74130841186:web:c052eb21a05bd35712bb3b"
+  };
+
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Cadastro de usuário
+  document.getElementById("cadastrar").onclick = async () => {
+    const nome = document.getElementById("nome").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value.trim();
+
+    if(!nome || !email || !senha) return alert("Preencha todos os campos!");
+
+    try {
+      await db.collection("usuarios").doc(email).set({
+        nome, email, senha,
+        alvenaria_dobrada: 0.0,
+        alvenaria_singela: 0.0,
+        sapatas: 0.0,
+        pilares: 0.0,
+        cintas: 0.0,
+        lage: 0.0,
+        contrapiso: 0.0,
+        piso: 0.0,
+        chapisco: 0.0,
+        emboco: 0.0,
+        ceramica_piso: 0.0,
+        ceramica_parede: 0.0,
+        porcelanato_piso: 0.0,
+        porcelanato_parede: 0.0
+      });
+      alert("Usuário cadastrado!");
+      document.getElementById("cadastro").style.display = "none";
+      document.getElementById("tabelaPrecos").style.display = "block";
+    } catch(e) {
+      alert("Erro ao cadastrar: " + e.message);
+    }
+  };
+
+  // Tornar células editáveis e atualizar Firestore
+  document.querySelectorAll(".editable").forEach(td => {
+    td.onclick = async () => {
+      const novoValor = prompt("Digite o valor em R$", td.textContent);
+      if(novoValor === null) return;
+
+      td.textContent = parseFloat(novoValor).toFixed(2);
+
+      const email = document.getElementById("email").value.trim();
+      if(!email) return alert("Erro: email não encontrado");
+
+      const field = td.dataset.field;
+      try {
+        await db.collection("usuarios").doc(email).update({
+          [field]: parseFloat(novoValor)
+        });
+      } catch(e) {
+        alert("Erro ao salvar valor: " + e.message);
+      }
+    };
+  });
+</script>
+
 </body>
 </html>
