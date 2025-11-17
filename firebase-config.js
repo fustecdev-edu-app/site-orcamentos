@@ -1,8 +1,7 @@
-// Importando os módulos do Firebase
+// 🔥 Substitua pelas suas credenciais do Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Configurações do Firebase (substitua com as suas credenciais)
 const firebaseConfig = {
   apiKey: "AIzaSyCXkOedIsoQAsdxxqM8F3P1YhqtMpaVCyU",
   authDomain: "site-orcamento-d9d86.firebaseapp.com",
@@ -13,6 +12,6 @@ const firebaseConfig = {
   appId: "1:74130841186:web:c052eb21a05bd35712bb3b"
 };
 
-// Inicializar app e banco Firestore
+// Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
